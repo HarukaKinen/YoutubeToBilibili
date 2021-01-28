@@ -2,7 +2,6 @@
 一个自动搬运youtube视频到哔哩哔哩的python脚本
 
 # 使用前注意事项
-
 **注意：仅在python3.8.6环境下测试过，其他版本需要自己摸索**
 
  1. 所需依赖项
@@ -26,6 +25,11 @@
 4. 确保有安装 [ffmpeg](https://ffmpeg.org/download.html)
     - Windows 用户可能即使安装了也会出错，这时候需要把相应的 ``.exe`` 文件放在 ``python安装路径/Scripts`` 目录下
     - Linux 用户可通过自己的 package manager 进行安装
+
+# 文件解释
+- ``main.py`` 检查是否有新视频 有则下载
+- ``download.py`` 下载视频
+- ``manually_download.py`` 下载指定链接的视频
 
 # 感谢
 
