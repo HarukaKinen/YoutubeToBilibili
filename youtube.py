@@ -14,6 +14,9 @@ class downloader:
 
     @classmethod
     def download(self, url):
+        if len(url) == 0:
+            return
+
         options = {
             'format': "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best",
             'forcethumbnail': False,
