@@ -47,17 +47,17 @@ class downloader:
                 print("[Download] All done")
 
                 print("[Upload] Start uploading")
-                
-                if os.path.exists("videos/{}.mp4".format(id)):
-                    print("[DEBUG] yes")
-                else:
-                    print("[DEBUG] no")
 
                 bilibili.upload("videos/{}.mp4".format(id), title, url, "thumbnail/temp.jpg", description)
-                os.remove("videos/{}.mp4".format(id))
-                os.remove("thumbnail/temp.jpg".format(id))
-                os.remove("thumbnail/temp.webp".format(id))
-                print("[Upload] Removed video file and thumbnail files.")
+                if os.path.exists("videos/{}.mp4".format(id)):
+                    os.remove("videos/{}.mp4".format(id))
+
+                if os.path.exists("thumbnail/temp.jpg".format(id)):
+                    os.remove("thumbnail/temp.jpg".format(id))
+
+                if os.path.exists("thumbnail/temp.webp".format(id)):
+                    os.remove("thumbnail/temp.webp".format(id))
+                
                 se.query(task).filter(task.id==id).update({'status': status.uploaded.value})
             except Exception as e:
                 id = url.replace("https://www.youtube.com/watch?v=", "")

@@ -11,11 +11,19 @@ class bilibili:
     def upload(video_path, title, source_link, thumbnail_path, description):
         try:
             verify = Verify(config.cookie_sessdata, config.cookie_jct)
-            video_file = video.video_upload(video_path, verify=verify)
-            print("[Upload] Uploaded video file successfully.")
+            try:
+                video_file = video.video_upload(video_path, verify=verify)
+                print("[Upload] Uploaded video file successfully.")
+            except Exception as e:
+                print("[Upload] Failed to upload video file. Make sure the video file exists")
+                return
 
-            thumbnail_file = video.video_cover_upload(thumbnail_path, verify=verify)
-            print("[Upload] Uploaded thubmnail successfully.")
+            try:
+                thumbnail_file = video.video_cover_upload(thumbnail_path, verify=verify)
+                print("[Upload] Uploaded thubmnail successfully.")
+            except Exception as e:
+                print("[Upload] Failed to upload thubmnail. Make sure the thumbnail file exists")
+                return
 
             data = {
                 "copyright": 2,
