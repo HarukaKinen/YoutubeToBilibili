@@ -48,7 +48,7 @@ class downloader:
 
                 print("[Upload] Start uploading")
 
-                bilibili.upload("videos/{}.mp4".format(id), title, url, "thumbnail/temp.jpg", description)
+                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/temp.jpg", description)
                 if os.path.exists("videos/{}.mp4".format(id)):
                     os.remove("videos/{}.mp4".format(id))
 
