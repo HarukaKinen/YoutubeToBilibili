@@ -19,17 +19,23 @@
 
 3. 根据[文档](https://github.com/Passkou/bilibili_api/blob/master/docs/模块/video.md#上传视频)对 ``bilibili.py`` 里的 ``data`` 进行更改
 
-3. 设置代理
+4. 设置代理
     - 在 ``youtube.py`` 中找到 ``download`` 这一method, 往 ``option`` 里添加 [proxy](https://github.com/ytdl-org/youtube-dl/blob/3e4cedf9e8cd3157df2457df7274d0c842421945/youtube_dl/YoutubeDL.py#L211)
 
-4. 确保有安装 [ffmpeg](https://ffmpeg.org/download.html)
+5. 确保有安装 [ffmpeg](https://ffmpeg.org/download.html)
     - Windows 用户可能即使安装了也会出错，这时候需要把相应的 ``.exe`` 文件放在 ``python安装路径/Scripts`` 目录下
     - Linux 用户可通过自己的 package manager 进行安装
 
+6. 确保数据库里 ``channel`` 表里有内容
+    - 可通过 ``INSERT INTO channel (name, url) VALUES ('频道名字', '频道ID');`` 语句插入
+
 # 文件解释
 - ``main.py`` 检查是否有新视频 有则下载
-- ``download.py`` 下载视频
+- ``download.py`` 下载上次任务 未下载/出错 的视频
 - ``manually_download.py`` 下载指定链接的视频
+
+# 关于PR
+由于我自己对 python 不太熟悉，如果觉得代码有改进的地方可以提交PR
 
 # 感谢
 
