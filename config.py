@@ -17,6 +17,9 @@ class config:
 
     setup_time = ""
 
+    bilibili_tid = 0
+    bilibili_tag = ""
+
     @classmethod
     def read(self):
         try:
@@ -29,5 +32,7 @@ class config:
             self.database_password = self.config.get("database", "password")
             self.database_name = self.config.get("database", "name")
             self.setup_time = self.config.get("time", "setup_time")
+            self.bilibili_tid = self.config.getint("bilibili", "tid")
+            self.bilibili_tag = self.config.get("bilibili", "tag")
         except Exception as e:
             print(e.args)

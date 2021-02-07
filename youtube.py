@@ -35,30 +35,35 @@ class downloader:
                 title = info['title']
                 thumbnail_url = info['thumbnail']
                 description = info['description']
+                upload_date = info['upload_date']
+                uploader = info['uploader']
                 id = info['id']
+
+                # ghetto way to implement, i blame youtubedl for shitty formation
+                upload_date = upload_date[:4] + '-' + upload_date[4:6] + '-' + upload_date[6:8]
                 sid = id
+
                 # https://stackoverflow.com/a/37821542
                 img_data = requests.get(thumbnail_url).content
-                with open("thumbnail/temp.webp", "wb") as handler:
+                with open("thumbnail/{}.webp".format(id), "wb") as handler:
                     handler.write(img_data)
 
-                im = Image.open("thumbnail/temp.webp").convert("RGB")
-                im.save("thumbnail/temp.jpg", "jpeg")
+                im = Image.open("thumbnail/{}.webp".format(id)).convert("RGB")
+                im.save("thumbnail/{}.jpg".format(id), "jpeg")
                 print("[Download] All done")
 
                 print("[Upload] Start uploading")
-
-                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/temp.jpg", description)
+                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/{}.jpg".format(id), description, uploader, upload_date)
+                se.query(task).filter(task.id==id).update({'status': status.uploaded.value})
                 if os.path.exists("videos/{}.mp4".format(id)):
                     os.remove("videos/{}.mp4".format(id))
 
-                if os.path.exists("thumbnail/temp.jpg".format(id)):
-                    os.remove("thumbnail/temp.jpg".format(id))
+                if os.path.exists("thumbnail/{}.jpg".format(id)):
+                    os.remove("thumbnail/{}.jpg".format(id))
 
-                if os.path.exists("thumbnail/temp.webp".format(id)):
-                    os.remove("thumbnail/temp.webp".format(id))
+                if os.path.exists("thumbnail/{}.webp".format(id)):
+                    os.remove("thumbnail/{}.webp".format(id))
                 
-                se.query(task).filter(task.id==id).update({'status': status.uploaded.value})
             except Exception as e:
                 id = url.replace("https://www.youtube.com/watch?v=", "")
                 se.query(task).filter(task.id==id).update({'status': status.error.value})
