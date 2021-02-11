@@ -37,7 +37,7 @@ class bilibili:
                 "lan": "语言",
                 "open": 0
             },
-            "tag": "\"" + config.bilibili_tag + "\"",
+            "tag": config.bilibili_tag,
             "tid": config.bilibili_tid,
             "title": title,
             "videos": [
