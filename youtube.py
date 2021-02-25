@@ -8,6 +8,8 @@ from bilibili import bilibili
 from PIL import Image
 from config import config
 
+config.read()
+
 class downloader:
 
     sid = ""
@@ -53,7 +55,7 @@ class downloader:
                 print("[Download] All done")
 
                 print("[Upload] Start uploading")
-                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/{}.jpg".format(id), description, uploader, upload_date)
+                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/{}.jpg".format(id), description[0:1999], uploader, upload_date)
                 se.query(task).filter(task.id==id).update({'status': status.uploaded.value})
                 if os.path.exists("videos/{}.mp4".format(id)):
                     os.remove("videos/{}.mp4".format(id))

@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, String, Integer, create_engine, update
+from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from config import config

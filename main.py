@@ -3,13 +3,13 @@ from config import config
 from youtube import monitor
 from database import status
 
+config.read()
+
 if not os.path.exists("videos"):
     os.mkdir("videos")
 
 if not os.path.exists("thumbnail"):
     os.mkdir("thumbnail")
-
-config.read()
 
 monitor.check_videos()
 
