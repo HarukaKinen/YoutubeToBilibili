@@ -21,7 +21,7 @@ class bilibili:
             thumbnail_file = video.video_cover_upload(thumbnail_path, verify=verify)
             print("[Upload] Uploaded thubmnail successfully.")
         except Exception as e:
-            raise("[Upload] Failed to upload thubmnail. Make sure the video file exists or the connection to bilibili is available")
+            raise("[Upload] Failed to upload thubmnail. Make sure the thubmnail file exists or the connection to bilibili is available")
             return
 
         data = {
