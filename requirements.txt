@@ -1,0 +1,5 @@
+bilibili_api
+pillow
+youtube-dl
+mysql-connector
+sqlalchemy
