@@ -29,6 +29,9 @@
 5. 确保数据库里 ``channel`` 表里有内容
     - 可通过 ``INSERT INTO channel (name, url) VALUES ('频道名字', '频道ID');`` 语句插入
 
+6. 确保 ``config.ini`` 中的 ``bili_jct`` 值是最新的
+    - B站的 csrf 值似乎每3个月就会变一次（如果有错请指出），所以最好每3个月更新一次 
+
 # 文件解释
 - ``main.py`` 检查是否有新视频 有则下载
 - ``download.py`` 下载上次任务 未下载/出错 的视频

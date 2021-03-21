@@ -14,14 +14,14 @@ class bilibili:
             video_file = video.video_upload(video_path, verify=verify)
             print("[Upload] Uploaded video file successfully.")
         except Exception as e:
-            raise("[Upload] Failed to upload video file. Make sure the video file exists or the connection to bilibili is available")
+            raise("[Upload] Failed to upload video file. Make sure the video file exists / the connection to bilibili is available / bili_jct is valid")
             return
 
         try:
             thumbnail_file = video.video_cover_upload(thumbnail_path, verify=verify)
             print("[Upload] Uploaded thubmnail successfully.")
         except Exception as e:
-            raise("[Upload] Failed to upload thubmnail. Make sure the thubmnail file exists or the connection to bilibili is available")
+            raise("[Upload] Failed to upload thubmnail. Make sure the thubmnail file exists / the connection to bilibili is available / bili_jct is valid")
             return
 
         data = {
