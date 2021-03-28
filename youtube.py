@@ -55,7 +55,7 @@ class downloader:
                 print("[Download] All done")
 
                 print("[Upload] Start uploading")
-                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/{}.jpg".format(id), description[0:1900], uploader, upload_date)
+                bilibili.upload("videos/{}.mp4".format(id), title[0:79], url, "thumbnail/{}.jpg".format(id), description, uploader, upload_date)
                 se.query(task).filter(task.id==id).update({'status': status.uploaded.value})
                 if os.path.exists("videos/{}.mp4".format(id)):
                     os.remove("videos/{}.mp4".format(id))
@@ -88,6 +88,10 @@ class monitor:
     
     @staticmethod
     def check_videos():
+        if len(config.api_key) == 0:
+            print("[Error] API Key is empty. Exiting")
+            exit()
+        
         channels = se.query(channel).all()
         for c in channels:   
             body = requests.get("https://www.googleapis.com/youtube/v3/search?key={}&channelId={}&part=snippet,id&order=date&maxResults=10&type=video".format(config.api_key, c.url))

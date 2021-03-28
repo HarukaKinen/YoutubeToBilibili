@@ -24,11 +24,13 @@ class bilibili:
             raise("[Upload] Failed to upload thubmnail. Make sure the thubmnail file exists / the connection to bilibili is available / bili_jct is valid")
             return
 
+        description = "频道: {} 上传日期:{}\n".format(uploader, upload_date) + description
+
         data = {
             "copyright": 2,
             "source": source_link,
             "cover": thumbnail_file,
-            "desc": "视频作者: {} 视频上传日期:{}\n".format(uploader, upload_date) + description,
+            "desc": description[0:1955],
             "desc_format_id": 0,
             "dynamic": "",
             "interactive": 0,
