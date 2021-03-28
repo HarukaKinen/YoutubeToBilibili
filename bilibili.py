@@ -30,7 +30,7 @@ class bilibili:
             "copyright": 2,
             "source": source_link,
             "cover": thumbnail_file,
-            "desc": description[0:1955],
+            "desc": description[0:1999-len(source_link)],
             "desc_format_id": 0,
             "dynamic": "",
             "interactive": 0,
