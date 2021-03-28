@@ -3,7 +3,7 @@ from database import se, task
 
 print("url: ")
 url = input()
-if url.find("youtube.com") == -1:
+if url.find("youtube.com") == -1 and url.find("youtu.be") == -1:
     print("not a youtube video link, stop running")
     exit()
 
