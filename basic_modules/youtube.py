@@ -111,14 +111,25 @@ class monitor:
         '''
     
     @staticmethod
-    def download_videos_from_task(value):
-        undownloaded_videos = task.get_task_status(value)
+    def download_videos_from_task():
+        undownloaded_videos = task.get_task_status(1)
         count = 0
         for t in undownloaded_videos:
             url = "https://www.youtube.com/watch?v={}".format(t.get_video_id())
-            print("downloading video. id: {} status:{}".format(t.get_video_id(), t.get_video_status()))
+            print("[-] downloading {} | status: {}".format(t.get_video_id(), t.get_video_status()))
             downloader.download(url)
             count += 1
             if len(undownloaded_videos) > 1 and count == len(undownloaded_videos) - 1:
                 # in case we submmit videos frequently
-                time.sleep(31)
+                time.sleep(20)
+
+        error_videos = task.get_task_status(4)
+        count = 0
+        for t in error_videos:
+            url = "https://www.youtube.com/watch?v={}".format(t.get_video_id())
+            print("[-] downloading {} | status: {}".format(t.get_video_id(), t.get_video_status()))
+            downloader.download(url)
+            count += 1
+            if len(error_videos) > 1 and count == len(error_videos) - 1:
+                # in case we submmit videos frequently
+                time.sleep(20)

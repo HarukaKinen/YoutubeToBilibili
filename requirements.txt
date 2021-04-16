@@ -4,4 +4,6 @@ youtube-dl
 mysql-connector
 sqlalchemy
 flask
+flask-sqlalchemy
 feedparser
+schedule

@@ -45,10 +45,11 @@ def feed():
             id = topic[-24:]
             query = channel.query.filter(channel.channel_id == id).first()
 
-            if query is None and mode == 'subscribe':
-                print(f"[!] Failed to find channel id {id} in database, adding.")
-                db.session.add(channel(channel_id=id, subscribe_mode=mode))
-                db.session.commit()
+            if query is None:
+                if  mode == 'subscribe':
+                    print(f"[!] Failed to find channel id {id} in database, adding.")
+                    db.session.add(channel(channel_id=id, subscribe_mode=mode))
+                    db.session.commit()
             else:
                 if mode == 'unsubscribe':
                     print(f"[!] Unsubscribe mode was found, deleting channel id {id} from database.")
