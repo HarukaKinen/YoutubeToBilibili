@@ -10,8 +10,6 @@ class bilibili:
     
     def upload(video_path, title, source_link, thumbnail_path, description, uploader, upload_date):
         verify = Verify(config.cookie_sessdata, config.cookie_jct)
-        print(video_path)
-        print(thumbnail_path)
         try:
             video_file = video.video_upload(path=video_path, verify=verify)
             print("[Upload] Uploaded video file successfully.")

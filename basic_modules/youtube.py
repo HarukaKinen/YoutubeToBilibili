@@ -19,6 +19,12 @@ class downloader:
         if len(url) == 0:
             return
 
+        if not os.path.exists("videos"):
+            os.mkdir("videos")
+
+        if not os.path.exists("thumbnail"):
+            os.mkdir("thumbnail")
+
         options = {
             'format': "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best",
             'forcethumbnail': False,
