@@ -3,3 +3,5 @@ pillow
 youtube-dl
 mysql-connector
 sqlalchemy
+flask
+feedparser

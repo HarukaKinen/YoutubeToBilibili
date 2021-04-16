@@ -3,10 +3,10 @@ import os
 import json
 import requests
 import datetime
-from database import channel, task, se, status
-from bilibili import bilibili
+from .database import channel, task, se, status
+from .bilibili import bilibili
 from PIL import Image
-from config import config
+from .config import config
 
 config.read()
 
@@ -92,10 +92,11 @@ class monitor:
             print("[Error] API Key is empty. Exiting")
             exit()
         
+        '''
         channels = se.query(channel).all()
         for c in channels:   
             body = requests.get("https://www.googleapis.com/youtube/v3/search?key={}&channelId={}&part=snippet,id&order=date&maxResults=10&type=video".format(config.api_key, c.url))
-            print("[Main] Checking "+ c.name)
+            print("[Main] Checking "+ c.channel_name)
             videos = json.loads(body.text)['items']
             for i in range(0, len(videos) - 1):
                 publish_time = videos[i]['snippet']['publishedAt']
@@ -105,9 +106,10 @@ class monitor:
                 # 2020-12-23-20-36-30
                 if publish_time_timestamp > setup_date:
                     if se.query(task).filter(task.id == video_id).first() is None:
-                        print("[Monitor] A new video from {} is found, adding to the list. ID: {}".format(c.name, video_id))
+                        print("[Monitor] A new video from {} is found, adding to the list. ID: {}".format(c.channel_name, video_id))
                         task.add_task(id=video_id)
-
+        '''
+    
     @staticmethod
     def download_videos_from_task(value):
         undownloaded_videos = task.get_task_status(value)

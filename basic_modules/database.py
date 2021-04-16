@@ -1,8 +1,8 @@
 import enum
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Integer, create_engine, insert
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
-from config import config
+from .config import config
 
 config.read()
 
@@ -22,9 +22,13 @@ class status(enum.IntEnum):
 class channel(base):
     __tablename__ = "channel"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    url = Column(String(255))
+    channel_id = Column(String(255), primary_key=True)
+    subscribe_mode = Column(String(255))
+
+    @classmethod
+    def add_channel(cls, **kwargs):
+        channel = cls(**kwargs)
+        se.add(channel)
 
 class task(base):
     __tablename__ = "tasks"

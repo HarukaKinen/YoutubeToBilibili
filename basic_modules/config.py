@@ -30,7 +30,7 @@ class config:
             self.database_host = self.config.get("database", "host")
             self.database_user = self.config.get("database", "user")
             self.database_password = self.config.get("database", "password")
-            self.database_name = self.config.get("database", "name")
+            self.database_name = self.config.get("database", "database_name")
             self.setup_time = self.config.get("time", "setup_time")
             self.bilibili_tid = self.config.getint("bilibili", "tid")
             self.bilibili_tag = self.config.get("bilibili", "tag")

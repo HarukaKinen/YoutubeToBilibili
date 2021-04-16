@@ -1,7 +1,7 @@
 import os
-from config import config
-from youtube import monitor
-from database import status
+from basic_modules.config import config
+from basic_modules.youtube import monitor
+from basic_modules.database import status
 
 config.read()
 
@@ -11,7 +11,7 @@ if not os.path.exists("videos"):
 if not os.path.exists("thumbnail"):
     os.mkdir("thumbnail")
 
-monitor.check_videos()
+#monitor.check_videos()
 
 monitor.download_videos_from_task(status.new.value)
 monitor.download_videos_from_task(status.error.value)
