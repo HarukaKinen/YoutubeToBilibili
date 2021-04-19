@@ -32,7 +32,6 @@
 # 文件解释
 - ``app.py`` 管理订阅服务器
 - ``main.py`` 检查是否有新视频 有则下载
-- ``download.py`` 下载上次任务 未下载/出错 的视频
 - ``download_schedule.py`` 每5分钟试图下载并上传未上传成功的视频
 - ``manually_download.py`` 下载指定链接的视频
 - ``subscribe_channel.py`` 订阅频道
