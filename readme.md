@@ -6,6 +6,8 @@
 
 **由于使用了bilibili_api库，如果出现无法使用的情况请回滚到8.1.0版本** 
 
+**请在 **config.ini** 的所在目录下运行py文件 **
+
 1. 使用 ``pip install -r requirements.txt --upgrade`` 安装依赖项
 
 2. 更改 ``config.ini`` 里的配置文件
