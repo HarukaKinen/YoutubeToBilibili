@@ -1,4 +1,4 @@
-bilibili_api
+bilibili_api>=8.1.0
 pillow
 youtube-dl
 mysql-connector

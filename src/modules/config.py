@@ -7,8 +7,7 @@ class config:
 
     cookie_sessdata = ""
     cookie_jct = ""
-
-    api_key = ""
+    cookie_access_key = ""
 
     database_host = ""
     database_user = ""
@@ -19,6 +18,7 @@ class config:
 
     bilibili_tid = 0
     bilibili_tag = ""
+    bilibili_desc_len = 2000
 
     @classmethod
     def read(self):
@@ -26,13 +26,14 @@ class config:
             self.config.read("config.ini", encoding="utf-8")
             self.cookie_sessdata = self.config.get("cookie", "sessdata")
             self.cookie_jct = self.config.get("cookie", "bili_jct")
-            self.api_key = self.config.get("api", "key")
+            self.cookie_access_key = self.config.get("cookie", "access_key")
             self.database_host = self.config.get("database", "host")
             self.database_user = self.config.get("database", "user")
             self.database_password = self.config.get("database", "password")
-            self.database_name = self.config.get("database", "database_name")
+            self.database_name = self.config.get("database", "name")
             self.setup_time = self.config.get("time", "setup_time")
             self.bilibili_tid = self.config.getint("bilibili", "tid")
             self.bilibili_tag = self.config.get("bilibili", "tag")
+            self.bilibili_desc_len = self.config.getint("bilibili", "desc_len")
         except Exception as e:
             print(e.args)

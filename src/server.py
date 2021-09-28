@@ -1,10 +1,8 @@
 import feedparser
 from flask import Flask
 from flask import request
-
-from basic_modules.youtube import downloader
-from basic_modules.config import config
-from flask_stuffs.database import db, channel, tasks
+from flask_sqlalchemy import SQLAlchemy
+from modules.config import config
 
 config.read()
 
@@ -12,6 +10,16 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}:3306/{}'.format(config.database_user, config.database_password, config.database_host, config.database_name)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy()
+
+class channel(db.Model):
+    channel_id = db.Column(db.String(255), primary_key=True)
+    subscribe_mode = db.Column(db.String(255))
+
+class tasks(db.Model):
+    id = db.Column(db.String(255), primary_key=True)
+    status = db.Column(db.Integer, default=1)
 
 db.init_app(app)
 db.create_all(app=app)
@@ -21,21 +29,13 @@ def feed():
     if request.method == 'POST':
         feed = feedparser.parse(request.get_data(parse_form_data=True))
         if feed:
-            print('[-] Successfully parsed feed.')
+            print('[-] Successfully parsed video feed.')
             for data in feed['entries']:
                 video_id = data['yt_videoid']
                 if tasks.query.filter(tasks.id == video_id).first() is None:
                     print(f"[!] Failed to find video id {video_id} in database, adding.")
                     db.session.add(tasks(id=video_id))
                     db.session.commit()
-                '''
-                # Note: aabandoned due to multithreading thing, please make a pr if you know how to fix
-                    downloader.download(data["link"])
-                elif se.query(task).filter(task.id==video_id).filter(task.status != status.uploaded.value):
-                    print(f"[-] Found video id '{video_id}' in database, but it was failed to download / upload, trying to download and upload it again")
-                    downloader.download(data["link"])
-                #print("[-] Link: ", data["link"])
-                '''
 
     if request.method == 'GET':
         challenge = request.args.get('hub.challenge')

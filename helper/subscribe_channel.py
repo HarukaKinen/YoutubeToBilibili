@@ -2,6 +2,7 @@ import argparse
 import requests
 import configparser
 
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-i", "--id", help="channel id to subscribe")
@@ -33,7 +34,7 @@ def setup_subscription(callback_server, channel_id, mode, lease_seconds: int):
 
 config = configparser.RawConfigParser()
 config.read("config.ini", encoding="utf-8")
-callback_server = self.config.get("server", "callback_server")
+callback_server = config.get("server", "callback_server")
 
 code = setup_subscription(callback_server, args.id, mode, args.lease_seconds)
 

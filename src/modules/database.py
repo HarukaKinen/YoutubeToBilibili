@@ -5,14 +5,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from .config import config
 
 config.read()
-
 base = declarative_base()
 
 def create_session(user, password, host, database_name):
-    engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(user, password, host, database_name))
-    se = sessionmaker(bind=engine, autocommit=True)
+    engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/{database_name}")
+    se = sessionmaker(bind=engine, autocommit=True, autoflush=True)
     # https://farer.org/2017/10/28/sqlalchemy_scoped_session
     session = scoped_session(se)
+    print("[-]seesion created")
     return session
 
 @enum.unique
@@ -31,7 +31,7 @@ class channel(base):
         se.add(channel)
 
 class task(base):
-    __tablename__ = "tasks"
+    __tablename__ = "task"
     id = Column(String(255), primary_key=True)
     status = Column(Integer, default=status.new.value)
 
