@@ -10,7 +10,7 @@
 
 2. 更改 ``config.ini`` 里的配置文件
     - ``sessdata`` 与 ``bili_jct`` 的获取方法[看这里](https://github.com/Passkou/bilibili_api#获取-sessdate-和csrf)   
-    - 数据库表结构可以参考 ``database.py`` 进行创建或输入以下指令创建
+    - 数据库表结构可以参考 ``database.py`` 进行创建 或 在连接到数据库服务器后，输入以下指令进行创建
         ```
         create database youtube_video character set utf8mb4 collate utf8mb4_unicode_ci;
 
