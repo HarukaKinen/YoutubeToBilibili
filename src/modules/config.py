@@ -19,6 +19,7 @@ class config:
     bilibili_tid = 0
     bilibili_tag = ""
     bilibili_desc_len = 2000
+    bilibili_video_info = False
 
     @classmethod
     def read(self):
@@ -35,5 +36,6 @@ class config:
             self.bilibili_tid = self.config.getint("bilibili", "tid")
             self.bilibili_tag = self.config.get("bilibili", "tag")
             self.bilibili_desc_len = self.config.getint("bilibili", "desc_len")
+            self.bilibili_video_info = self.config.getboolean("bilibili", "video_info")
         except Exception as e:
             print(e.args)

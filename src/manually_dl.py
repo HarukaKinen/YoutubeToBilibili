@@ -1,5 +1,9 @@
-from modules.video import download, se, task
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--db", help="use db", action='store_true')
+args = parser.parse_args()
 
+from modules.video import download
 print("url: ")
 url = input()
 if url.find("youtube.com/watch?v=") == -1 and url.find("youtu.be/") == -1:
@@ -11,8 +15,4 @@ if url.find("youtube.com/watch?v=") != -1:
 elif url.find("youtu.be/") != -1:
     id = url.replace("https://youtu.be/", "")
 
-if se.query(task).filter(task.id==id).first() is None:
-    print(f"[-] {id} is not in database, adding.")
-    task.add_task(id=id)
-
-download(url)
+download(url, id, args.db)

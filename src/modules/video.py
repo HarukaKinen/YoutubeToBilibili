@@ -4,7 +4,7 @@ import requests
 from PIL import Image
 from bilibili_api import sync, video_uploader
 from .config import config
-from .database import se, task, status
+from .database import se, task, status, channel, channel_type
 
 class dl_logger(object):
     def debug(self, msg):
@@ -27,7 +27,7 @@ def remove_stuff(id):
     if os.path.exists(f"thumbnail/{id}.webp"):
         os.remove(f"thumbnail/{id}.webp")
 
-async def upload(url, title, description, video, thumbnail, video_id):
+async def upload(url, title, description, video, thumbnail, description_length, tags, category_id):
     credential = video_uploader.VideoUploaderCredential(access_key=config.cookie_access_key)
     
     '''
@@ -57,7 +57,7 @@ async def upload(url, title, description, video, thumbnail, video_id):
     meta = {
         "copyright": 2,
         "source": url,
-        "desc": description[0:config.bilibili_desc_len - len(url)], # x个字符限制，视频源链接还算进去就挺离谱的，但每个分区的限制长度不一样就更离谱了
+        "desc": description[0:description_length - len(url)], # x个字符限制，视频源链接还算进去就挺离谱的，但每个分区的限制长度不一样就更离谱了
         "desc_format_id": 0,
         "dynamic": "",
         "interactive": 0,
@@ -67,8 +67,8 @@ async def upload(url, title, description, video, thumbnail, video_id):
             "lan": "",
             "open": 0
         },
-        "tag": config.bilibili_tag,
-        "tid": config.bilibili_tid,
+        "tag": tags,
+        "tid": category_id,
         "title": title,
         "up_close_danmaku": False,
         "up_close_reply": False
@@ -84,9 +84,14 @@ async def upload(url, title, description, video, thumbnail, video_id):
 
     await uploader.start()
 
-def download(url):
+def download(url, id_src, database=True):
     if len(url) == 0:
         return
+
+    if database == True:
+        if se.query(task).filter(task.id==id_src).first() is None:
+            print(f"[-] {id_src} is not in database, adding.")
+            task.add_task(id=id_src)
 
     if not os.path.exists("videos"):
         os.mkdir("videos")
@@ -103,40 +108,65 @@ def download(url):
         'outtmpl': u'videos/%(id)s.%(ext)s',
     }
 
-    print("[-] Downloading video")
+    print("[-] 开始下载视频及相关信息")
 
     with youtube_dl.YoutubeDL(options) as dl:
         try:
             dl.cache.remove()
             info = dl.extract_info(url, download=True)
+            #print(info)
             title = info['title']
             thumbnail_url = info['thumbnail']
             description = info['description']
-            #upload_date = info['upload_date']
-            #uploader = info['uploader']
-            id = info['id']
+            channel_id = info['channel_url'].replace("https://www.youtube.com/channel/", "")
+            video_id = info['id']
 
-            # TODO: 放在简介里？
-            #upload_date = upload_date[:4] + '-' + upload_date[4:6] + '-' + upload_date[6:8]
-            # https://stackoverflow.com/a/37821542
+            if config.bilibili_video_info == True:
+                upload_date = info['upload_date']
+                upload_date = upload_date[:4] + '-' + upload_date[4:6] + '-' + upload_date[6:8]
+                uploader = info['uploader']
+                description = "频道:" + uploader + " 日期:" + upload_date + "\n" + description
+
             img_data = requests.get(thumbnail_url).content
-            with open(f"thumbnail/{id}.webp", "wb") as handler:
+            with open(f"thumbnail/{video_id}.webp", "wb") as handler:
                 handler.write(img_data)
 
-            im = Image.open(f"thumbnail/{id}.webp").convert("RGB")
-            im.save(f"thumbnail/{id}.jpg", "jpeg")
-            print("[+] Finished downloading")
+            im = Image.open(f"thumbnail/{video_id}.webp").convert("RGB")
+            im.save(f"thumbnail/{video_id}.jpg", "jpeg")
+            print("[+] 下载部分已完成")
 
-            print("[-] Uploading")
-            sync(upload(url=url, title=title, description=description, video=f"videos/{id}.mp4", thumbnail=f"thumbnail/{id}.jpg", video_id=id))
-            se.query(task).filter(task.id == id).update({"status": status.uploaded.value})
-            print("[+] Successfully uploaded")
-            remove_stuff(id)
+            tags = config.bilibili_tag
+            category_id = config.bilibili_tid
+            description_length = config.bilibili_desc_len
+
+            if database == True:
+                print("[-] 获取频道信息中")
+                query_result = se.query(channel).filter(channel.channel_id == channel_id).first()
+                if query_result is not None:
+                    t = query_result.type
+                    type_info = se.query(channel_type).filter(channel_type.row_ == t).first()
+                    if type_info is not None:
+                        tags = type_info.tag
+                        category_id = type_info.category_id
+                        description_length = type_info.description_length
+                    else:
+                        raise Exception("找到了频道但找不到对应的类型，请更新表")
+                else:
+                    print("[-] 无法从数据库里获取频道信息，使用配置文件里的上传信息（分区，标签，简介长度）")
+
+            print("[-] 上传中")
+            sync(upload(url=url, title=title, description=description, video=f"videos/{video_id}.mp4", thumbnail=f"thumbnail/{video_id}.jpg", tags=tags, category_id=category_id, description_length=description_length))
+            if database == True:
+                se.query(task).filter(task.id == video_id).update({"status": status.uploaded.value})
+
+            print("[+] 上传成功")
+            remove_stuff(video_id)
         except Exception as e:
             error_msg = e.__str__()
-            if error_msg.find("代码：21012") != -1: #消息：请不要反复提交相同标题的稿件（虽然我觉得不会有就是了...
-                se.query(task).filter(task.id == id).update({"status": status.uploaded.value})
-                remove_stuff(id)
-            else:
-                se.query(task).filter(task.id == id).update({"status": status.error.value})
-            print(e)
+            if database == True:
+                if error_msg.find("代码：21012") != -1: #消息：请不要反复提交相同标题的稿件（虽然我觉得不会有就是了...
+                    se.query(task).filter(task.id == video_id).update({"status": status.uploaded.value})
+                    remove_stuff(video_id)
+                else:
+                    se.query(task).filter(task.id == video_id).update({"status": status.error.value})
+            print("[!] 上传失败 原因：" + error_msg)
