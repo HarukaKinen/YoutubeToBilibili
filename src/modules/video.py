@@ -57,7 +57,7 @@ async def upload(url, title, description, video, thumbnail, video_id):
     meta = {
         "copyright": 2,
         "source": url,
-        "desc": description[0:config.bilibili_desc_len - 1 - len(url)], # x个字符限制，视频源链接还算进去就挺离谱的，但每个分区的限制长度不一样就更离谱了
+        "desc": description[0:config.bilibili_desc_len - len(url)], # x个字符限制，视频源链接还算进去就挺离谱的，但每个分区的限制长度不一样就更离谱了
         "desc_format_id": 0,
         "dynamic": "",
         "interactive": 0,
@@ -75,7 +75,7 @@ async def upload(url, title, description, video, thumbnail, video_id):
     }
 
     # 所有分区的视频标题应该都是80个字符吧..?
-    page = video_uploader.VideoUploaderPage(video_stream=open(video, "rb"), title=title[0:79], description=description)
+    page = video_uploader.VideoUploaderPage(video_stream=open(video, "rb"), title=title[0:80], description=description)
     uploader = video_uploader.VideoUploader([page], meta, credential, threads=1, cover_stream=open(thumbnail, "rb"))
 
     @uploader.on("__ALL__")
