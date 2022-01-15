@@ -7,7 +7,6 @@ class config:
 
     cookie_sessdata = ""
     cookie_jct = ""
-    cookie_access_key = ""
 
     database_host = ""
     database_user = ""
@@ -27,7 +26,6 @@ class config:
             self.config.read("config.ini", encoding="utf-8")
             self.cookie_sessdata = self.config.get("cookie", "sessdata")
             self.cookie_jct = self.config.get("cookie", "bili_jct")
-            self.cookie_access_key = self.config.get("cookie", "access_key")
             self.database_host = self.config.get("database", "host")
             self.database_user = self.config.get("database", "user")
             self.database_password = self.config.get("database", "password")

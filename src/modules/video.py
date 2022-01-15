@@ -2,7 +2,7 @@ import youtube_dl
 import os
 import requests
 from PIL import Image
-from bilibili_api import sync, video_uploader
+from bilibili_api import sync, video_uploader, Credential
 from .config import config
 from .database import se, task, status, channel, channel_type
 
@@ -28,8 +28,8 @@ def remove_stuff(id):
         os.remove(f"thumbnail/{id}.webp")
 
 async def upload(url, title, description, video, thumbnail, description_length, tags, category_id):
-    credential = video_uploader.VideoUploaderCredential(access_key=config.cookie_access_key)
-    
+    credential = Credential(sessdata=config.cookie_sessdata, bili_jct=config.cookie_jct)
+
     '''
     {
         "copyright": "int, 投稿类型。1 自制，2 转载。",
@@ -75,8 +75,8 @@ async def upload(url, title, description, video, thumbnail, description_length, 
     }
 
     # 所有分区的视频标题应该都是80个字符吧..?
-    page = video_uploader.VideoUploaderPage(video_stream=open(video, "rb"), title=title[0:80], description=description)
-    uploader = video_uploader.VideoUploader([page], meta, credential, threads=1, cover_stream=open(thumbnail, "rb"))
+    page = video_uploader.VideoUploaderPage(path=video, title=title[0:80], description=description)
+    uploader = video_uploader.VideoUploader([page], meta, credential, cover_path=thumbnail)
 
     @uploader.on("__ALL__")
     async def event(data):
