@@ -1,6 +1,12 @@
 # YoutubeToBilibili
 一个自动搬运youtube视频到哔哩哔哩的python脚本
 
+# 声明
+如果遇到不能用的情况请自行排查, 请勿跟图下这个人一样到别的repository开无关issue. 目前脚本可以正常运行(2022-04-26 12:32 UTC+8)
+
+![不要当这个人](https://i.imgur.com/uNhrUPC.png)
+![不要当这个人](https://i.imgur.com/TQK6FHF.png)
+
 # 使用前注意事项
 
 **请在 config.ini 的所在目录下运行py文件**
@@ -40,6 +46,7 @@
  
 # 关于订阅服务器
 由于我自己是本地使用所以我用 [ngrok](https://ngrok.com/) 把内网暴露给外网，你也可以把订阅服务器架设在服务器上之类的（反正只是拿一个订阅信息，国内服务器应该不会被gfw拦截吧..)
+
 
 # 感谢
 
